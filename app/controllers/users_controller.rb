@@ -50,6 +50,7 @@ class UsersController < ApplicationController
     @title = "Following"
     @user = User.find(params[:id])
     @users = @user.followed_users.paginate(page: params[:page])
+    @subtitle = "You Are Following #{@user.decorate.formatted_followed_count.size} Bloggers"
     render 'show_follow'
   end
 
@@ -57,6 +58,7 @@ class UsersController < ApplicationController
     @title = "Followers"
     @user = User.find(params[:id])
     @users = @user.followers.paginate(page: params[:page])
+    @subtitle = "Your Got #{@user.decorate.formatted_followers_count} Followers"
     render 'show_follow'
   end
 
