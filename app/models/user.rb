@@ -53,6 +53,13 @@ class User < ActiveRecord::Base
     relationships.find_by(followed_id: other_user.id).destroy
   end
 
+  # downcase the searched for email
+  scope :by_email_wildcard, ->(q) { where("email like ?", "#{q.downcase}%") }
+
+  def self.by_email(email)
+    where(email: email.downcase).first
+  end
+
   private
 
     def create_remember_token
