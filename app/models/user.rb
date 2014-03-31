@@ -13,6 +13,8 @@
 #
 
 class User < ActiveRecord::Base
+  include User::FinderMethods
+
   has_many :microposts, dependent: :destroy
   has_many :relationships, foreign_key: "follower_id", dependent: :destroy
   has_many :followed_users, through: :relationships, source: :followed
@@ -53,14 +55,6 @@ class User < ActiveRecord::Base
     relationships.find_by(followed_id: other_user.id).destroy
   end
 
-  # downcase the searched for email
-  scope :by_email_wildcard, ->(q) { where("email like ?", "#{q.downcase}%") }
-
-  def self.by_email(email)
-    where(email: email.downcase).first
-  end
-
-  # Other finder methods
 
   private
 
