@@ -1,4 +1,6 @@
 <% provide(:title, @title) %>
+
+<% cache [@user, @title] do %>
 <div class="row">
   <aside class="span4">
     <section>
@@ -19,7 +21,7 @@
     </section>
   </aside>
   <div class="span8">
-    <h3><%= @title %></h3>
+    <h3><%= @subtitle %></h3>
     <% if @users.any? %>
       <ul class="users">
         <%= render @users %>
@@ -28,3 +30,4 @@
     <% end %>
   </div>
 </div>
+<% end %>
