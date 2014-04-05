@@ -13,6 +13,12 @@ def make_users
                        password: "foobar",
                        password_confirmation: "foobar",
                        admin: true)
+  minor = User.create!(name:     "Little Punk",
+                       email:    "littlepunk@sugarranchmaui.com",
+                       password: "foobar",
+                       password_confirmation: "foobar",
+                       admin: false,
+                       minor: true)
   99.times do |n|
     name  = Faker::Name.name
     email = "example-#{n+1}@railstutorial.org"
