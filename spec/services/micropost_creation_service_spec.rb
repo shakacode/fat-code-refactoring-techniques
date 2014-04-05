@@ -14,6 +14,12 @@ describe MicropostCreationService do
           expect(response.ok).to be_false
           expect(minor.reload.profanity_count).to eq(1)
         end
+
+        it "does not increase the number of posts" do
+          expect do
+            service.create_micropost
+          end.to_not change { Micropost.count }
+        end
       end
 
       context "does contain two word profanity" do
@@ -52,6 +58,12 @@ describe MicropostCreationService do
             expect(response.redirect_path).to_not be_nil
             expect(response.ok).to be_true
             expect(minor.profanity_count).to eq(0)
+          end
+
+          it "does increase the number of posts" do
+            expect do
+              service.create_micropost
+            end.to change { Micropost.count }.by(1)
           end
         end
       end
