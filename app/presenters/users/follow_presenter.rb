@@ -36,4 +36,9 @@ class Users::FollowPresenter
   def microposts_count
     h.number_with_delimiter(user.microposts.count)
   end
+
+  def cache_key
+    # great place to put complicated cache key logic
+    [user, type]
+  end
 end
