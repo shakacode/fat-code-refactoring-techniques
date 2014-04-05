@@ -30,6 +30,7 @@
 
         config.autoload_paths += %W(
           #{config.root}/app/presenters
+          #{config.root}/app/services
         )
       end
     end
