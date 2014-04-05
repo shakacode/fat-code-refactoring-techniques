@@ -10,6 +10,8 @@
 #  password_digest :string(255)
 #  remember_token  :string(255)
 #  admin           :boolean
+#  profanity_count :integer          default(0)
+#  minor           :boolean          default(FALSE)
 #
 
 require 'spec_helper'

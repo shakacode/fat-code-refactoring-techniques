@@ -3,8 +3,18 @@
   <aside class="span4">
     <section>
       <h1>
-        <%= gravatar_for @user %>
+        <%= gravatar_for @user, size: 125 %>
         <%= @user.name %>
+        <% if @user.minor? %>
+          <br/>
+            A Minor
+          <% if @user.profanity_count > 0 %>
+            <br/>
+            <span class="text-error">
+            <%= pluralize(@user.profanity_count, "Profanity") %>
+            </span>
+          <% end %>
+        <% end %>
       </h1>
     </section>
     <section>
