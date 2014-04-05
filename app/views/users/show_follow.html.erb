@@ -1,5 +1,5 @@
 <% provide(:title, @presenter.title) %>
-<% cache [@presenter.user, @presenter.type] do %>
+<% cache @presenter.cache_key do %>
 <div class="row">
   <aside class="span4">
     <section>
