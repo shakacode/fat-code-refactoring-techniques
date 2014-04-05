@@ -8,7 +8,9 @@ class MicropostCreationService
   end
 
   def create_micropost
-    micropost = @user.microposts.build(content: @content)
+    # Don't use call @user.microposts.build(content: @content) because we will save the user
+    # when there's profanity.
+    micropost = Micropost.new(user: @user, content: @content)
     response  = check_profanity(micropost)
     unless response
       response = save_micropost(micropost)
