@@ -33,6 +33,8 @@ class MicropostCreationService
 
     if has_profanity?
       @user.increment(:profanity_count, profanity_words.size)
+      @user.save!(validate: false) # validation false b/c of password min length
+
       msg = <<-MSG
         Whoa, better watch your language! Profanity: '#{profanity_words.join(", ")}' not allowed!
         You've tried to use profanity #{h.pluralize(@user.profanity_count, "time")}!
