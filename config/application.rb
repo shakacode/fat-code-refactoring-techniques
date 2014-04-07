@@ -27,5 +27,9 @@
         I18n.enforce_available_locales = true
 
         config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif)
+
+        config.autoload_paths += %W(
+          #{config.root}/app/presenters
+        )
       end
     end
