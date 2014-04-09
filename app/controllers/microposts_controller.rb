@@ -4,27 +4,12 @@ class MicropostsController < ApplicationController
 
   def create
     @micropost = Micropost.new(micropost_params.merge(user: current_user))
-    ok = true
-    if current_user.minor?
-      profanity_words =  ProfanityChecker.new(@micropost.content).profanity_words_contained
-      if profanity_words.present?
-        flash.now[:error] = "You cannot create a micropost with profanity: '#{profanity_words.join(", ")}'!"
-        current_user.increment(:profanity_count)
-        current_user.save(validate: false)
-        send_parent_notifcation_of_profanity(profanity_words)
-        @feed_items = []
-        render 'static_pages/home'
-        ok = false
-      end
-    end
-    if ok
-      if @micropost.save
-        flash[:success] = "Micropost created!"
-        redirect_to root_url
-      else
-        @feed_items = []
-        render 'static_pages/home'
-      end
+    if @micropost.save_checking_profanity
+      flash[:success] = "Micropost created!"
+      redirect_to root_url
+    else
+      set_flash_for_profanities
+      render 'static_pages/home'
     end
   end
 
@@ -34,12 +19,14 @@ class MicropostsController < ApplicationController
   end
 
   private
-    def send_parent_notifcation_of_profanity(profanity_words)
-      # send email
-    end
-
-    def micropost_params
-      params.require(:micropost).permit(:content)
+    # Example of customized flash message when the standard validation is not sufficient
+    def set_flash_for_profanities
+      if @micropost.profanity_words_for_minor.present?
+        flash.now[:error] = <<-MSG
+                Whoa, better watch your language! Profanity: '#{@micropost.profanity_words_for_minor.join(", ")}' not allowed!
+                You've tried to use profanity #{view_context.pluralize(current_user.profanity_count, "time")}!
+        MSG
+      end
     end
 
     def correct_user

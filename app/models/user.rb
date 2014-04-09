@@ -40,9 +40,22 @@ class User < ActiveRecord::Base
     Digest::SHA1.hexdigest(token.to_s)
   end
 
-  private
+  # Actions to take if minor tries to use profanities
+  # profanities List of words attempted to use
+  def minor_tried_to_use_profanities(profanity_words)
+    raise "Called minor_tried_to_use_profanities with adult" unless minor?
+    increment(:profanity_count, profanity_words.size)
+    save(validate: false)
+    send_parent_notifcation_of_profanity
+  end
 
-    def create_remember_token
+  private
+    def send_parent_notifcation_of_profanity
+      # pretend we sent an email, using @profanity_words in the content
+    end
+
+
+  def create_remember_token
       self.remember_token = User.hash(User.new_remember_token)
     end
 end
