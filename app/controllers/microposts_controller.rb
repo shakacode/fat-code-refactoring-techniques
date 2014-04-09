@@ -6,7 +6,7 @@ class MicropostsController < ApplicationController
     @micropost = Micropost.new(micropost_params.merge(user: current_user))
     ok = true
     if current_user.minor?
-      profanity_words =  profanity_words(@micropost.content)
+      profanity_words =  ProfanityChecker.new(@micropost.content).profanity_words_contained
       if profanity_words.present?
         flash.now[:error] = "You cannot create a micropost with profanity: '#{profanity_words.join(", ")}'!"
         current_user.increment(:profanity_count)
@@ -34,21 +34,6 @@ class MicropostsController < ApplicationController
   end
 
   private
-    PROFANITY_WORDS = %w(poop fart fartface poopface poopbuttface)
-
-    # Yes, this could go into a validator for the micropost, but let's suppose there's reasons
-    # that we don't want to do that, such as we only want to filter profanity for posts
-    # created by minors, etc.
-    # returns profanity word if existing in content, or else nil
-    def profanity_words(content)
-      profanity_list = []
-      words = content.split(/\W/)
-      PROFANITY_WORDS.each do |test_word|
-        profanity_list << test_word if words.include?(test_word)
-      end
-      profanity_list
-    end
-
     def send_parent_notifcation_of_profanity(profanity_words)
       # send email
     end
