@@ -130,6 +130,29 @@ describe User do
     before { @user.save }
     its(:remember_token) { should_not be_blank }
   end
-
 end
 
+describe "User#minor_tried_to_use_profanities" do
+  let(:profanity_words) { ['poop', 'poopface'] }
+  context "minor" do
+    before { @minor = FactoryGirl.create(:user, minor: true, ) }
+    it "increments the profanity counter" do
+      expect do
+        @minor.minor_tried_to_use_profanities(profanity_words)
+      end.to change(@minor, :profanity_count).by(profanity_words.size)
+    end
+    it "sends parent notification of profanity" do
+      allow(@minor).to receive(:send_parent_notifcation_of_profanity).and_return(nil)
+      @minor.minor_tried_to_use_profanities(profanity_words)
+      expect(@minor).to have_received(:send_parent_notifcation_of_profanity)
+    end
+  end
+  context "adult" do
+    before { @adult = FactoryGirl.create(:user, minor: false) }
+    it "raises an error" do
+      expect do
+        @adult.minor_tried_to_use_profanities(profanity_words)
+      end.to raise_error
+    end
+  end
+end

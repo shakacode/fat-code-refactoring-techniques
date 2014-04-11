@@ -1,4 +1,4 @@
-<% if @feed_items.any? %>
+<% if @feed_items.try(:any?) %>
   <ol class="microposts">
     <%= render partial: 'shared/feed_item', collection: @feed_items %>
   </ol>
