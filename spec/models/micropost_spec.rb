@@ -39,3 +39,44 @@ describe Micropost do
     it { should_not be_valid }
   end
 end
+
+describe "profanity checking" do
+  let(:profane_content) { "Dad is a poopface and fartface!" }
+  let(:clean_content) { "Dad is the best!" }
+  let(:minor) { FactoryGirl.create :user, minor: true }
+  let(:adult) { FactoryGirl.create :user, minor: false }
+  context "user is a minor" do
+    context "with profanity" do
+      before { @micropost = Micropost.new(content: profane_content, user: minor) }
+      it "returns false" do
+        expect(@micropost).not_to be_valid
+      end
+      it "has validation error for content" do
+        @micropost.save
+        content_errors = @micropost.errors[:content][0]
+        expect(content_errors).to match /poopface/
+        expect(content_errors).to match /fartface/
+      end
+    end
+    context "without profanity" do
+      it "is valid" do
+        micropost = Micropost.new(content: clean_content, user: minor)
+        expect(micropost).to be_valid
+      end
+    end
+  end
+  context "user is an adult" do
+    context "with profanity" do
+      it "is valid" do
+        micropost = Micropost.new(content: profane_content, user: adult)
+        expect(micropost).to be_valid
+      end
+    end
+    context "without profanity" do
+      it "is valid" do
+        micropost = Micropost.new(content: clean_content, user: adult)
+        expect(micropost).to be_valid
+      end
+    end
+  end
+end

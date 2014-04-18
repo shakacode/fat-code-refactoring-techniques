@@ -4,7 +4,7 @@ class MicropostsController < ApplicationController
 
   def create
     @micropost = Micropost.new(micropost_params.merge(user: current_user))
-    if current_user.minor? && (profane_words_used = profane_words_in(@micropost.content))
+    if current_user.minor? && (profane_words_used = @micropost.profane_words_in_content)
         current_user.increment(:profanity_count, profane_words_used.size)
         current_user.save(validate: false)
         send_parent_notifcation_of_profanity(profane_words_used)
@@ -30,17 +30,6 @@ class MicropostsController < ApplicationController
   end
 
   private
-
-    # return array of profane words in content or nil if none
-    def profane_words_in(content)
-      # PRETEND: Hit external REST API
-
-      # NOTE: Implementation below is a simulation
-      profane_words = %w(poop fart fartface poopface poopbuttface)
-      content_words = content.split(/\W/)
-      content_words.select { |word| word.in? profane_words }.presence
-    end
-
     def send_parent_notifcation_of_profanity(profane_words)
       # PRETEND: send email
       Rails.logger.info("Sent profanity alert email to parent of #{current_user.name}, "\
