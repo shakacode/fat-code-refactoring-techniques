@@ -26,12 +26,30 @@ class Micropost < ActiveRecord::Base
 
   # return array of profane words in content or nil if none
   def profane_words_in_content
-    # PRETEND: Hit external REST API
-
-    # NOTE: Implementation below is a simulation
+    # Better to set this somewhere configurable. Placing here for example purposes.
     profane_words = %w(poop fart fartface poopface poopbuttface)
     content_words = content.split(/\W/)
     content_words.select { |word| word.in? profane_words }.presence
+  end
+
+  # This could have been done with and after_save hook, but it seems wrong to ever be sending
+  # emails from after_save.
+  # Return true if save successful
+  def save_with_profanity_callbacks
+    transaction do
+      valid = save
+      if profanity_validation_error?
+        profane_words_used = profane_words_in_content
+        user.increment(:profanity_count, profane_words_used.size)
+        user.save(validate: false)
+        user.send_parent_notification_of_profanity(profane_words_used)
+      end
+      valid
+    end
+  end
+
+  def profanity_validation_error?
+    errors[:content].find { |error| error =~ /\AProfanity:/ }
   end
 
   private
@@ -41,5 +59,4 @@ class Micropost < ActiveRecord::Base
         errors.add(:content, "Profanity: #{profane_words.join(", ")} not allowed!")
       end
     end
-
 end

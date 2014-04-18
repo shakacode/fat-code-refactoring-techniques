@@ -4,23 +4,16 @@ class MicropostsController < ApplicationController
 
   def create
     @micropost = Micropost.new(micropost_params.merge(user: current_user))
-    if current_user.minor? && (profane_words_used = @micropost.profane_words_in_content)
-        current_user.increment(:profanity_count, profane_words_used.size)
-        current_user.save(validate: false)
-        send_parent_notifcation_of_profanity(profane_words_used)
-        flash.now[:error] = <<-MSG.html_safe
-          <p>Whoa, better watch your language! Profanity: '#{profane_words_used.join(", ")}' not allowed!
-          You've tried to use profanity #{view_context.pluralize(current_user.profanity_count, "time")}!
-          </p><p class="parent-notification">Your parents have been notified!</p>
-        MSG
-        render 'static_pages/home'
+    if @micropost.save_with_profanity_callbacks
+      flash[:success] = "Micropost created!"
+      redirect_to root_url
     else
-      if @micropost.save
-        flash[:success] = "Micropost created!"
-        redirect_to root_url
-      else
-        render 'static_pages/home'
-      end
+      # flash.now[:error] = <<-MSG.html_safe
+      #   <p>Whoa, better watch your language! Profanity: '#{profane_words_used.join(", ")}' not allowed!
+      #   You've tried to use profanity #{view_context.pluralize(current_user.profanity_count, "time")}!
+      #   </p><p class="parent-notification">Your parents have been notified!</p>
+      # MSG
+      render 'static_pages/home'
     end
   end
 
@@ -30,12 +23,6 @@ class MicropostsController < ApplicationController
   end
 
   private
-    def send_parent_notifcation_of_profanity(profane_words)
-      # PRETEND: send email
-      Rails.logger.info("Sent profanity alert email to parent of #{current_user.name}, "\
-          "who used profane words: #{profane_words}")
-    end
-
     def micropost_params
       params.require(:micropost).permit(:content)
     end
