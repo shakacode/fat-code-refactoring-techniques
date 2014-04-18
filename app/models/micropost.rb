@@ -34,6 +34,26 @@ class Micropost < ActiveRecord::Base
     content_words.select { |word| word.in? profane_words }.presence
   end
 
+  # This could have been done with and after_save hook, but it seems wrong to ever be sending
+  # emails from after_save.
+  # Return true if save successful
+  def save_with_profanity_callbacks
+    transaction do
+      valid = save
+      if profanity_validation_error?
+        profane_words_used = profane_words_in_content
+        user.increment(:profanity_count, profane_words_used.size)
+        user.save(validate: false)
+        user.send_parent_notification_of_profanity(profane_words_used)
+      end
+      valid
+    end
+  end
+
+  def profanity_validation_error?
+    errors[:content].find { |error| error =~ /\AProfanity:/ }
+  end
+
   private
 
     def no_profanity
@@ -41,5 +61,4 @@ class Micropost < ActiveRecord::Base
         errors.add(:content, "Profanity: #{profane_words.join(", ")} not allowed!")
       end
     end
-
 end
