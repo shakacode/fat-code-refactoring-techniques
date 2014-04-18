@@ -17,7 +17,7 @@ end
 
 group :development, :test do
   gem 'sqlite3', '1.3.8'
-  gem 'rspec-rails', '2.13.1'
+  gem 'rspec-rails', '2.14'
   # The following optional lines are part of the advanced setup.
   gem 'guard-rails'
   gem 'guard-rspec'
