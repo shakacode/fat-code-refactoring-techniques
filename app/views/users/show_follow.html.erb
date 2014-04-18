@@ -1,19 +1,19 @@
-<% provide(:title, @title) %>
+<% provide(:title, @presenter.title) %>
 
-<% cache [@user, @title] do %>
+<% cache @presenter.cache_key do %>
 <div class="row">
   <aside class="span4">
     <section>
-      <%= gravatar_for @user %>
-      <h1><%= @user.name %></h1>
-      <span><%= link_to "view my profile", @user %></span>
-      <span><b>Microposts:</b> <%= @user.microposts.count %></span>
+      <%= gravatar_for @presenter.user %>
+      <h1><%= @presenter.user.name %></h1>
+      <span><%= link_to "view my profile", @presenter.user %></span>
+      <span><b>Microposts:</b> <%= @presenter.user.microposts.count %></span>
     </section>
     <section>
       <%= render 'shared/stats' %>
-      <% if @users.any? %>
+      <% if @presenter.users.any? %>
         <div class="user_avatars">
-          <% @users.each do |user| %>
+          <% @presenter.users.each do |user| %>
             <%= link_to gravatar_for(user, size: 30), user %>
           <% end %>
         </div>
@@ -21,12 +21,12 @@
     </section>
   </aside>
   <div class="span8">
-    <h3><%= @subtitle %></h3>
-    <% if @users.any? %>
+    <h3><%= @presenter.subtitle %></h3>
+    <% if @presenter.users.any? %>
       <ul class="users">
-        <%= render @users %>
+        <%= render @presenter.users %>
       </ul>
-      <%= will_paginate %>
+      <%= will_paginate @presenter.users %>
     <% end %>
   </div>
 </div>
