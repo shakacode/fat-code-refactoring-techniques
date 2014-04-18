@@ -53,6 +53,11 @@ class User < ActiveRecord::Base
     relationships.find_by(followed_id: other_user.id).destroy
   end
 
+  def email_domain
+    regex = /\A[\w+\-.]+@([a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z)/i
+    email[regex, 1]
+  end
+
   # downcase the searched for email
   scope :by_email_wildcard, ->(q) { where("email like ?", "#{q.downcase}%") }
 
