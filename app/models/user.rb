@@ -54,6 +54,12 @@ class User < ActiveRecord::Base
     relationships.find_by(followed_id: other_user.id).destroy
   end
 
+  def update_for_using_profanity(profane_words_used)
+    increment(:profanity_count, profane_words_used.size)
+    save(validate: false)
+    send_parent_notification_of_profanity(profane_words_used)
+  end
+
   def send_parent_notification_of_profanity(profane_words)
     # PRETEND: send email
     Rails.logger.info("Sent profanity alert email to parent of #{name}, "\

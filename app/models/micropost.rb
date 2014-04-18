@@ -41,10 +41,7 @@ class Micropost < ActiveRecord::Base
     transaction do
       valid = save
       if profanity_validation_error?
-        profane_words_used = profane_words_in_content
-        user.increment(:profanity_count, profane_words_used.size)
-        user.save(validate: false)
-        user.send_parent_notification_of_profanity(profane_words_used)
+        user.update_for_using_profanity(profane_words_in_content)
       end
       valid
     end
