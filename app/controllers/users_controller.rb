@@ -47,12 +47,12 @@ class UsersController < ApplicationController
   end
 
   def following
-    @presenter = Users::FollowPresenter.new(:following, params[:id], params[:page])
+    @presenter = Users::FollowedUsersPresenter.new(params[:id], params[:page])
     render 'show_follow'
   end
 
   def followers
-    @presenter = Users::FollowPresenter.new(:followers, params[:id], params[:page])
+    @presenter = Users::FollowersPresenter.new(params[:id], params[:page])
     render 'show_follow'
   end
 
