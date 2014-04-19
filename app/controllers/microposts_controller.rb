@@ -8,10 +8,7 @@ class MicropostsController < ApplicationController
       flash[:success] = "Micropost created!"
       redirect_to root_url
     else
-      if @micropost.profanity_validation_error?
-        @micropost.errors[:content].clear # remove the default validation message
-        flash.now[:error] = @micropost.decorate.profanity_violation_msg
-      end
+      adjust_micropost_profanity_message
       render 'static_pages/home'
     end
   end
@@ -29,5 +26,12 @@ class MicropostsController < ApplicationController
     def correct_user
       @micropost = current_user.microposts.find_by(id: params[:id])
       redirect_to root_url if @micropost.nil?
+    end
+
+    def adjust_micropost_profanity_message
+      if @micropost.profanity_validation_error?
+        @micropost.errors[:content].clear # remove the default validation message
+        flash.now[:error] = @micropost.decorate.profanity_violation_msg
+      end
     end
 end
