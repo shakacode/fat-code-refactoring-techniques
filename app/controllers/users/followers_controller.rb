@@ -1,6 +1,6 @@
 module Users
   class FollowersController < ApplicationController
-    before_action :signed_in_user
+    include SignedInUser
 
     def followers
       @presenter = Users::FollowersPresenter.new(params[:id], params[:page])
