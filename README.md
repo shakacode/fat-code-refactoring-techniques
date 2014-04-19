@@ -3,14 +3,20 @@
 This example application covers four Rails Refactoring techniques:
 Concerns, Decorators, Presenters, and moving code to models.
 It builds on the Ruby on Rails Tutorial: sample application by Michael Hartl:
-[*Ruby on Rails Tutorial: Learn Web Development with Rails*](http://railstutorial.org/)
+[*Ruby on Rails Tutorial: Learn Web Development with Rails*](http://railstutorial.org/).
+However, it is changed in that minors cannot post profanity. If you login as
+"littlepunk@sugarranchmaui.com", password "foobar", you get the minor profanity
+checking behavior. There is no UI for setting a user to be a minor, FYI.
 
-The main lessons are presented several pull requests. Much of the
-lesson information is contained in the pull request description.
+The code is carefully crafted so that the initial code (at branch `railsconf-start`
+is relatively "clean". The lessons can thus focus only on the refactoring techniques,
+which are presented several pull requests. Much of the lesson information is contained
+in the pull request description.
 
-Please inspect the individual commits, as the final result (tip of the branch)
-has several smaller lessons included. And please feel free to comment on the
-pull request and/or submit issues.
+Please inspect the individual commits, as the refactorings are broken up into smaller
+staps. The final result, the tip of the branch, contains the full refactoring.
+Please feel free to comment on the pull requests and/or submit issues. You may also
+contact me directly at [justin@railsonmaui.com](mailto:justin@railsonmaui.com).
 
 The branches labeled `rc-` are the final versions developed for my RailsConf 2014 presentation,
 titled "Concerns, Decorators, Presenters, Service Objects, Helpers, Help Me Decide!".
@@ -33,7 +39,7 @@ can find the prior two refactoring attempts here:
 # Setup
 
 The command `guard` both runs the tests and the application.
-To re-run all tests, in the `guard` console window, type `a<return>`.
+To re-run all tests, in the `guard` console window, type `a <return>`.
 
 This will create a branch called `refactoring-tutorial` where you can follow the examples.
 
