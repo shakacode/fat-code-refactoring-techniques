@@ -10,11 +10,7 @@ class MicropostsController < ApplicationController
     else
       if @micropost.profanity_validation_error?
         @micropost.errors[:content].clear # remove the default validation message
-        flash.now[:error] = <<-MSG.html_safe
-          <p>Whoa, better watch your language! Profanity: '#{@micropost.profane_words_in_content.join(", ")}' not allowed!
-          You've tried to use profanity #{view_context.pluralize(current_user.profanity_count, "time")}!
-          </p><p class="parent-notification">Your parents have been notified!</p>
-        MSG
+        flash.now[:error] = @micropost.decorate.profanity_violation_msg
       end
       render 'static_pages/home'
     end
