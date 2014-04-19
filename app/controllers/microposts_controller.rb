@@ -8,9 +8,10 @@ class MicropostsController < ApplicationController
         current_user.increment(:profanity_count, profane_words_used.size)
         current_user.save(validate: false)
         send_parent_notifcation_of_profanity(profane_words_used)
-        flash.now[:error] = <<-MSG
-              Whoa, better watch your language! Profanity: '#{profane_words_used.join(", ")}' not allowed!
-              You've tried to use profanity #{view_context.pluralize(current_user.profanity_count, "time")}!
+        flash.now[:error] = <<-MSG.html_safe
+          <p>Whoa, better watch your language! Profanity: '#{profane_words_used.join(", ")}' not allowed!
+          You've tried to use profanity #{view_context.pluralize(current_user.profanity_count, "time")}!
+          </p><p class="parent-notification">Your parents have been notified!</p>
         MSG
         render 'static_pages/home'
     else
