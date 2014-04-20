@@ -26,7 +26,9 @@ Topic      | Branch | Pull Request
 Concerns   | rc-concerns | https://github.com/justin808/fat-code-refactoring-techniques/pull/9
 Decorators | rc-decorators | https://github.com/justin808/fat-code-refactoring-techniques/pull/10
 Presenters | rc-presenters | https://github.com/justin808/fat-code-refactoring-techniques/pull/11
-Models rather than Service Objects | rc-business-logic-in-model | https://github.com/justin808/fat-code-refactoring-techniques/pull/12
+Models rather than Service Objects | rc-business-logic-in-model | https://github.com/justin808/fat-code-refactoring-techniques/pull/15
+Split Controllers | rc-split-controller | https://github.com/justin808/fat-code-refactoring-techniques/pull/13
+Controller Concerns | rc-controller-concerns | https://github.com/justin808/fat-code-refactoring-techniques/pull/14
 
 Note, I originally planned to cover "Service Objects". However, my example of a refactoring the
 "Kid Safe Microblogger" actually demonstrated how a Service Object pattern is not needed. Instead,
@@ -43,25 +45,52 @@ To re-run all tests, in the `guard` console window, type `a <return>`.
 
 This will create a branch called `refactoring-tutorial` where you can follow the examples.
 
-
-    $ cd /tmp
-    $ git clone https://github.com/justin808/fat-code-refactoring-techniques.git
-    $ git checkout railsconf-start
-    $ git checkout -b refactoring-tutorial
-    $ cd fat-code-refactoring-techniques
-    $ cp config/database.yml.example config/database.yml
-    $ bundle install
-    $ bundle exec rake db:migrate
-    $ bundle exec rake db:test:prepare
-    $ guard
+```bash
+$ cd /tmp
+$ git clone https://github.com/justin808/fat-code-refactoring-techniques.git
+$ git checkout railsconf-start
+$ git checkout -b refactoring-tutorial
+$ cd fat-code-refactoring-techniques
+$ cp config/database.yml.example config/database.yml
+$ bundle install
+$ bundle exec rake db:migrate
+$ bundle exec rake db:test:prepare
+$ guard
+```
 
 Then, if you want to see the completed application:
 
-    $ git checkout railsconf-finish
-    $ bundle install
-    $ guard
+```bash
+$ git checkout railsconf-finish
+$ bundle install
+$ guard
+```
 
 I would suggest creating your `refactoring-tutorial` branch and then manually applying the commits
 in the pull requests, creating your own commits along the way.
 
 At each commit, the tests should continue to pass.
+
+You can simulate the flow of what I'll be doing in the presentation with the git scripts in `bin/git-railsconf.zsh`.
+
+```bash
+$ cd <top level of git repo>
+$ . bin/git-railsconf.zsh
+$ git checkout railsconf-start # you're at the beginning of the refactorings
+```
+
+Then you can run this to simulate the first edit:
+
+```bash
+$ railsconf-start
+```
+
+Take a look at the files that are changed. See the tests pass. Experiment. Then run:
+
+```bash
+$ railsconf-advance-history
+```
+
+That will move the history forward one step, and the changing files will be in the git index.
+
+*WARNING*: These scripts mercilessly do `git reset --hard`. So beware!
