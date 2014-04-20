@@ -24,7 +24,7 @@
     <h3><%= @presenter.subtitle %></h3>
     <% if @presenter.users.any? %>
       <ul class="users">
-        <%= render @presenter.users %>
+        <%= render collection: @presenter.users, partial: 'users/user' %>
       </ul>
       <%= will_paginate @presenter.users %>
     <% end %>

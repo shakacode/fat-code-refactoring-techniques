@@ -173,3 +173,19 @@ describe User do
   end
 end
 
+describe "User#update_for_using_profanity" do
+  let(:profanity_words) { ['poop', 'poopface'] }
+  context "minor" do
+    before { @minor = FactoryGirl.create(:user, minor: true) }
+    it "increments the profanity counter" do
+      expect do
+        @minor.update_for_using_profanity(profanity_words)
+      end.to change(@minor, :profanity_count).by(profanity_words.size)
+    end
+    it "sends parent notification of profanity" do
+      allow(@minor).to receive(:send_parent_notification_of_profanity).and_return(nil)
+      @minor.update_for_using_profanity(profanity_words)
+      expect(@minor).to have_received(:send_parent_notification_of_profanity)
+    end
+  end
+end
