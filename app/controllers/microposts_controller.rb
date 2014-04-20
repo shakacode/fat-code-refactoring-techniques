@@ -33,10 +33,8 @@ class MicropostsController < ApplicationController
 
     # return array of profane words in content or nil if none
     def profane_words_in(content)
-      # PRETEND: Hit external REST API
-
-      # NOTE: Implementation below is a simulation
-      profane_words = %w(poop fart fartface poopface poopbuttface)
+      # Better to set this somewhere configurable. Placing here for example purposes.
+      profane_words = %w(poop fart fartface fartbuttface poopface poopbuttface)
       content_words = content.split(/\W/)
       content_words.select { |word| word.in? profane_words }.presence
     end
