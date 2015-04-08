@@ -1,6 +1,6 @@
 # Refactoring Fat Models, Controllers, and Views Example
 
-[RailsConf 2014 Slides for this material](https://www.icloud.com/iw/#keynote/BALu9Dy-Dcbu1PvWluyB_G-jq5C6URGmij2F/RailsConf-2014-Concerns-Decorators-Presenters-Service-Objects-Helpers-Help-Me-Decide-April-22-2014)
+[RailsOnMaui Links to slides, talk, etc.](http://www.railsonmaui.com/blog/2014/04/23/railsconf-2014/)
 
 This example application covers four Rails Refactoring techniques:
 Concerns, Decorators, Presenters, and moving code to models.
