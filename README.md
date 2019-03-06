@@ -18,7 +18,7 @@ in the pull request description.
 Please inspect the individual commits, as the refactorings are broken up into smaller
 staps. The final result, the tip of the branch, contains the full refactoring.
 Please feel free to comment on the pull requests and/or submit issues. You may also
-contact me directly at [justin@railsonmaui.com](mailto:justin@railsonmaui.com).
+contact me directly at [justin@shakacode.com](mailto:justin@shakacode.com).
 
 The branches labeled `rc-` are the final versions developed for my RailsConf 2014 presentation,
 titled "Concerns, Decorators, Presenters, Service Objects, Helpers, Help Me Decide!".
